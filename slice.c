@@ -40,7 +40,6 @@ static int snd_slice_hw_params(struct snd_pcm_substream *substream,
 	struct snd_soc_pcm_runtime *rtd = substream->private_data;
 	struct snd_soc_dai *codec_dai = rtd->codec_dai;
 	struct snd_soc_dai *cpu_dai = rtd->cpu_dai;
-	struct snd_soc_codec *codec = rtd->codec;
 	int err;
 	int ret;
 	unsigned int rate = params_rate(params);
@@ -66,7 +65,7 @@ static int snd_slice_hw_params(struct snd_pcm_substream *substream,
 			sysclk = 12288000;
 			break;
 		case 128000:
-			dev_err(codec->dev,
+			dev_err(rtd->card->dev,
 			"Failed to set CS4265 SYSCLK, sample rate not supported in ALSA: 128000\n");
 			break;
 		case 176400:
@@ -76,7 +75,7 @@ static int snd_slice_hw_params(struct snd_pcm_substream *substream,
 			sysclk = 12288000;
 			break;
 		default:
-			dev_err(codec->dev,
+			dev_err(rtd->card->dev,
 			"Failed to set CS4265 SYSCLK, sample rate not supported\n");
 			break;
 	}
@@ -94,7 +93,7 @@ static int snd_slice_hw_params(struct snd_pcm_substream *substream,
 	if((ret = clk_prepare_enable(gp0_clock)) < 0)
 		pr_err("Failed to enable clock\n");
 
-	dev_err(codec->dev, "Set sampling frequency %d, using sysclk %d\n", rate, sysclk);
+	dev_err(rtd->card->dev, "Set sampling frequency %d, using sysclk %d\n", rate, sysclk);
 
 	err = snd_soc_dai_set_sysclk(codec_dai, 0, sysclk,
 				     SND_SOC_CLOCK_OUT);
