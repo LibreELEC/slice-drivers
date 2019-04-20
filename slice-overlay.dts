@@ -25,7 +25,7 @@
       slice_ir_pins: slice_ir_pins {
         brcm,pins = <37>;
         brcm,function = <0>; // GPIO_IN
-        brcm,pull = <1>; // PUD_DOWN
+        brcm,pull = <2>; // PUD_UP is correct
       };
       cs4265_reset_pins: cs4265_reset_pins {
         brcm,pins = <33>;
