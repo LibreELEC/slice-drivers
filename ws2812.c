@@ -433,7 +433,7 @@ static int ws2812_probe(struct platform_device *pdev)
 		goto fail_pixbuf;
 	}
 	state->phys_addr = be32_to_cpup(addr);
-	pr_err("bus_addr = 0x%x\n", state->phys_addr);
+	pr_err("bus_addr = %pa\n", &state->phys_addr);
 
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 	state->ioaddr = devm_ioremap_resource(&pdev->dev, res);
