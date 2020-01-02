@@ -162,19 +162,21 @@ static const struct snd_soc_pcm_stream snd_slice_params = {
          .formats = SNDRV_PCM_FMTBIT_S32_LE | SNDRV_PCM_FMTBIT_S24_LE | SNDRV_PCM_FMTBIT_S16_LE,
 };
 
+SND_SOC_DAILINK_DEFS(hifi,
+	DAILINK_COMP_ARRAY(COMP_CPU("bcm2708-i2s.0")),
+	DAILINK_COMP_ARRAY(COMP_CODEC("cs4265.1-004e", "cs4265-dai1")),
+	DAILINK_COMP_ARRAY(COMP_PLATFORM("bcm2708-i2s.0")));
+
 static struct snd_soc_dai_link snd_slice_dai[] = {
 {
 	.name		= "Slice",
 	.stream_name	= "Slice HiFi",
-	.cpu_dai_name	= "bcm2708-i2s.0",
-	.codec_dai_name	= "cs4265-dai1",
-	.platform_name	= "bcm2708-i2s.0",
-	.codec_name	= "cs4265.1-004e",
 	.dai_fmt	= SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF |
 				SND_SOC_DAIFMT_CBM_CFM,
 	.ops		= &snd_slice_ops,
 	.init		= snd_slice_init,
 	.be_hw_params_fixup = snd_slice_params_fixup,
+	SND_SOC_DAILINK_REG(hifi),
 },
 };
 
@@ -202,10 +204,10 @@ static int snd_slice_probe(struct platform_device *pdev)
 					    "i2s-controller", 0);
 
 		if (i2s_node) {
-			dai->cpu_dai_name = NULL;
-			dai->cpu_of_node = i2s_node;
-			dai->platform_name = NULL;
-			dai->platform_of_node = i2s_node;
+			dai->cpus->dai_name = NULL;
+			dai->cpus->of_node = i2s_node;
+			dai->platforms->name = NULL;
+			dai->platforms->of_node = i2s_node;
 		}
 	}
 	else
